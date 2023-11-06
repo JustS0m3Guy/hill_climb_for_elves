@@ -44,7 +44,7 @@ public:
 			}
 		}
 	}
-	vector<pair<int, int>> Neighbour(pair<int, int> coord)
+	vector<pair<int, int>> neighbour(pair<int, int> coord)
 	{
 		vector<pair<int, int>> result;
 		// we check all possible neighbour to see if they would be out of bounds
@@ -63,7 +63,7 @@ public:
 		return result;
 
 	}
-	void Diagnostics()
+	void diagnostics()
 	{
 		cout << "----------------------------------\n";
 		for (int i = 0; i < mountain_map.size(); i++)
@@ -80,16 +80,16 @@ public:
 		cout << "\nNumber of rows: " << mountain_map.size() << "\nNumber of colums: " << mountain_map[0].size();
 		cout << "\nStarting pozition: x = " << sx << " y = " << sy;
 		cout << "\nEnding pozition: x = " << end_coord.second << " y = " << end_coord.first;
-		StepDiagnostics(start_coord);
+		step_diagnostics(start_coord);
 	}
-	void StepDiagnostics(pair<int, int> new_start_coord)
+	void step_diagnostics(pair<int, int> new_start_coord)
 	{
 		cout << "\n----------------------------------\n";
 		start_coord = new_start_coord;
 		vector<pair<int, int>> neigbours;
 		if (mountain_map[sy][sx] == 'S')
 			mountain_map[sy][sx] = 'a';
-		neigbours = Neighbour(start_coord); // gives back coordinates of neigbours as y, x
+		neigbours = neighbour(start_coord); // gives back coordinates of neigbours as y, x
 		cout << "Eligible neigbours of x = " << sx << " y = " << sy << " are:";
 		for (int i = 0; i < neigbours.size(); i++)
 		{
@@ -98,7 +98,7 @@ public:
 		}
 		cout << "\nWe are on a(n): " << mountain_map[sy][sx] << "(" << int(mountain_map[sy][sx]) << ")\t(a - z ch=97-122)";
 	}
-	int ResultMaking(vector<vector<pair<int, int>>> route)
+	int result_making(vector<vector<pair<int, int>>> route)
 	{
 		vector<vector<char>> result(mountain_map.size(),vector<char>(mountain_map[0].size(), '.'));
 		pair<int, int> current_from = route[end_coord.first][end_coord.second];
@@ -127,7 +127,7 @@ public:
 		}
 		return min_steps;
 	}
-	int ShortestPath(pair<int, int> start_coords)
+	int shortest_path(pair<int, int> start_coords)
 	{
 		vector<vector<int>> color(mountain_map.size(), vector<int>(mountain_map[0].size()));
 		vector<vector<pair<int, int>>> from(mountain_map.size(), vector<pair<int, int>>(mountain_map[0].size(), {-1,-1}));
@@ -143,7 +143,7 @@ public:
 			pair<int, int> to_process = todo.front();
 			todo.pop();
 			color[to_process.first][to_process.second] = black;
-			vector<pair<int, int>> neigbours = Neighbour(to_process);
+			vector<pair<int, int>> neigbours = neighbour(to_process);
 			for (int i = 0; i < neigbours.size(); i++)
 				if (color[neigbours[i].first][neigbours[i].second] == white)
 				{
@@ -169,30 +169,30 @@ public:
 			cout << "\n";
 		}
 		/**/
-		return ResultMaking(from);
+		return result_making(from);
 	}
-	void ShortestOfAllPath()
+	void shortest_of_all_path()
 	{
 		vector<pair<int, int>> starting_coords;
 		for (int i = 0; i < mountain_map.size(); i++)
 			for (int j = 0; j < mountain_map[i].size(); j++)
 				if (mountain_map[i][j] == 'a')
 				{
-					vector<pair<int, int>> neigbours = Neighbour({ i, j });
+					vector<pair<int, int>> neigbours = neighbour({ i, j });
 					for (int k = 0; k < neigbours.size(); k++)
 						if (mountain_map[neigbours[k].first][neigbours[k].second] == 'b')
 							starting_coords.push_back({i, j});
 				}
 		for (int i = 0; i < starting_coords.size(); i++)
-			cout << ShortestPath(starting_coords[i]);
+			cout << shortest_path(starting_coords[i]);
 	}
 };
 
 int main()
 {
 	Mountain mountain;
-	mountain.Diagnostics();
-	cout << "\n" << mountain.ShortestPath(mountain.start_coord);
+	mountain.diagnostics();
+	cout << "\n" << mountain.shortest_path(mountain.start_coord);
 	//mountain.ShortestOfAllPath();
 }
 
